@@ -1,11 +1,16 @@
 package com.example.userservice.services;
 
+import java.util.Date;
+import java.util.Calendar;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.example.exceptions.UnAuthorizedException;
+import com.example.exceptions.UserNotFoundException;
 import com.example.userservice.models.Token;
 import com.example.userservice.models.User;
+import com.example.userservice.repositories.TokenRepository;
 import com.example.userservice.repositories.UserRepository;
 
 
@@ -14,18 +19,52 @@ public class UserServiceImpl implements UserService
 {
 
     private UserRepository userRepository;
-    public UserServiceImpl(UserRepository userRepository)
+    private TokenRepository tokenRepository;
+    public UserServiceImpl(UserRepository userRepository, TokenRepository tokenRepository)
     {
         this.userRepository = userRepository;
+        this.tokenRepository = tokenRepository;
 
     }
 
 
 
     @Override
-    public Token login(String email, String password) {
+    public Token login(String email, String password) throws UserNotFoundException, UnAuthorizedException 
+    {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
 
-        return null;
+        if (optionalUser.isEmpty()) {
+            // redirect to signUp
+            throw new UserNotFoundException("user with email: "+ email+" not found.");
+            
+        }
+        // create a token.
+        User user = optionalUser.get();
+        if (user.getPassword().equals(password))
+        {
+            Token token = new Token();
+            token.setUser(user);
+            token.setValue("aadadahdhjadkkjfhwekhafbkjsdhfkjdhf");
+
+            Date currentDate = new Date(); // current date and time.
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(currentDate);
+
+            // Add 30 days to the calendar
+            calendar.add(Calendar.DAY_OF_MONTH, 30);
+
+            // Get the updated time as a Date object
+            Date dateAfter30Days = calendar.getTime();
+            
+            token.setExpiryDate(dateAfter30Days);
+            
+            //return tokenRepository.save(token);
+            return tokenRepository.save(token);
+        }
+
+        //login failed
+        throw new UnAuthorizedException("The user is unauthorized to login");
     }
 
     @Override
