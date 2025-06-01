@@ -11,6 +11,7 @@ import com.example.userservice.dtos.LoginRequestDto;
 import com.example.userservice.dtos.LogoutRequestDto;
 import com.example.userservice.dtos.SignUpRequestDto;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,7 +57,9 @@ public class UserController {
     @GetMapping("/logout")
     public ResponseEntity<Void> logout(@RequestBody LogoutRequestDto requestDto)
     {
-        return null;
+        userService.logout(requestDto.getTokenValue());
+        return new ResponseEntity<Void>
+        (HttpStatus.OK);
     }
 
     @GetMapping("/validate")

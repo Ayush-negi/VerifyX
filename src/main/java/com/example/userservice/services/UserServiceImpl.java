@@ -68,7 +68,18 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
-    public void logout(String tokenValue) {
+    public void logout(String tokenValue) 
+    {
+
+        Optional<Token> optionalToken = tokenRepository.findByValue(tokenValue);
+
+        if (optionalToken.isEmpty()) {
+            throw new RuntimeException("Token Invalid.");
+        }
+
+        Token token = optionalToken.get();
+        token.setDeleted(true);
+        tokenRepository.save(token);
 
         
     }
