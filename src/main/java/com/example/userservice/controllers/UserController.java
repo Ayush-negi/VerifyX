@@ -7,6 +7,8 @@ import com.example.userservice.dtos.UserDto;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.exceptions.UnAuthorizedException;
+import com.example.exceptions.UserNotFoundException;
 import com.example.userservice.dtos.LoginRequestDto;
 import com.example.userservice.dtos.LogoutRequestDto;
 import com.example.userservice.dtos.SignUpRequestDto;
@@ -34,7 +36,7 @@ public class UserController {
     
 
     @PostMapping("/login")
-    public Token login(@RequestBody LoginRequestDto requestDto)
+    public Token login(@RequestBody LoginRequestDto requestDto)  throws UserNotFoundException, UnAuthorizedException
     {
         return userService.login(requestDto.getEmail(), requestDto.getPassword() );
     }
@@ -62,10 +64,14 @@ public class UserController {
         (HttpStatus.OK);
     }
 
-    @GetMapping("/validate")
+    @GetMapping("/validate/{tokenValue}")
     public UserDto validateToken(@PathVariable String tokenValue)
     {
-        return null;
+        User user = userService.validateToken(
+            tokenValue
+        );
+
+        return UserDto.from(user);
     }
 
     

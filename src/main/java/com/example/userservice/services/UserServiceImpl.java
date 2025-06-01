@@ -106,8 +106,17 @@ public class UserServiceImpl implements UserService
 
     @Override
     public User validateToken(String tokenValue) {
+                //Check if the token is present in the DB, token is NOT deleted and
+        //token's expiry time is greater than the current time.
+        Optional<Token> optionalToken = tokenRepository.findByValueAndDeletedAndExpiryDateGreaterThan(
+                        tokenValue,
+                        false,
+                        new Date()
+                );
 
-        return null;
+        //Token invalid
+        return optionalToken.map(Token::getUser).orElse(null);
+        // :: this is called the refrence operator and in the above we are using streams.
     }
 
 
