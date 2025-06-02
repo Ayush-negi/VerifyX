@@ -6,8 +6,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.example.exceptions.UnAuthorizedException;
-import com.example.exceptions.UserNotFoundException;
+import com.example.userservice.exceptions.UnAuthorizedException;
+import com.example.userservice.exceptions.UserNotFoundException;
 import com.example.userservice.models.Token;
 import com.example.userservice.models.User;
 import com.example.userservice.repositories.TokenRepository;

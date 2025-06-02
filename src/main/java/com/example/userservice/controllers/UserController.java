@@ -7,8 +7,8 @@ import com.example.userservice.dtos.UserDto;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.exceptions.UnAuthorizedException;
-import com.example.exceptions.UserNotFoundException;
+import com.example.userservice.exceptions.UnAuthorizedException;
+import com.example.userservice.exceptions.UserNotFoundException;
 import com.example.userservice.dtos.LoginRequestDto;
 import com.example.userservice.dtos.LogoutRequestDto;
 import com.example.userservice.dtos.SignUpRequestDto;

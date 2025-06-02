@@ -1,7 +1,7 @@
 package com.example.userservice.services;
 import com.example.userservice.models.User;
-import com.example.exceptions.UnAuthorizedException;
-import com.example.exceptions.UserNotFoundException;
+import com.example.userservice.exceptions.UnAuthorizedException;
+import com.example.userservice.exceptions.UserNotFoundException;
 import com.example.userservice.models.Token;
 
 
