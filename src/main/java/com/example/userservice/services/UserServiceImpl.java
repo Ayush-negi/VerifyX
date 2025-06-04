@@ -4,8 +4,9 @@ import java.util.Date;
 import java.util.Calendar;
 import java.util.Optional;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.apache.commons.lang3.RandomStringUtils;
 import com.example.userservice.exceptions.UnAuthorizedException;
 import com.example.userservice.exceptions.UserNotFoundException;
 import com.example.userservice.models.Token;
@@ -20,10 +21,12 @@ public class UserServiceImpl implements UserService
 
     private UserRepository userRepository;
     private TokenRepository tokenRepository;
-    public UserServiceImpl(UserRepository userRepository, TokenRepository tokenRepository)
+    private BCryptPasswordEncoder passwordEncoder;
+    public UserServiceImpl(UserRepository userRepository, TokenRepository tokenRepository,  BCryptPasswordEncoder passwordEncoder)
     {
         this.userRepository = userRepository;
         this.tokenRepository = tokenRepository;
+        this.passwordEncoder = passwordEncoder;
 
     }
 
@@ -41,11 +44,11 @@ public class UserServiceImpl implements UserService
         }
         // create a token.
         User user = optionalUser.get();
-        if (user.getPassword().equals(password))
+        if (passwordEncoder.matches(password, user.getPassword()))
         {
             Token token = new Token();
             token.setUser(user);
-            token.setValue("aadadahdhjadkkjfhwekhafbkjsdhfkjdhf");
+            token.setValue(RandomStringUtils.randomAlphanumeric(128));
 
             Date currentDate = new Date(); // current date and time.
             Calendar calendar = Calendar.getInstance();
@@ -97,7 +100,7 @@ public class UserServiceImpl implements UserService
         User user = new User();
         user.setName(name);
         user.setEmail(email);
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
         // later password needs to be stored in the encoded form using BCrypt Password Encoder.
 
 
