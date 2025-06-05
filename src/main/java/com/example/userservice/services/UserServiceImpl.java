@@ -1,6 +1,7 @@
 package com.example.userservice.services;
 
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Optional;
 
@@ -102,7 +103,7 @@ public class UserServiceImpl implements UserService
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         // later password needs to be stored in the encoded form using BCrypt Password Encoder.
-
+        user.setRoles(new ArrayList<>());
 
         return userRepository.save(user);
     }

@@ -1,4 +1,5 @@
 package com.example.userservice.dtos;
+import java.util.ArrayList;
 import java.util.List;
 
 //import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
@@ -18,7 +19,7 @@ import lombok.Setter;
 public class UserDto {
     private String name;
     private String email;
-    private List<Role> roles;
+    private List<String> roles;
 
     public static UserDto from(User user)
     {
@@ -29,7 +30,12 @@ public class UserDto {
         UserDto userDto = new UserDto();
         userDto.setName(user.getName());
         userDto.setEmail(user.getEmail());
-        userDto.setRoles(user.getRoles());
+        
+        userDto.setRoles(new ArrayList<>());
+
+        for (Role role : user.getRoles()) {
+            userDto.getRoles().add(role.getValue());
+        }
         return userDto;
     }
 
